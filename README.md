@@ -43,7 +43,7 @@ git init
 git add --all .
 git commit -m "Initial commit"
 git branch -M main
-git remote add origin git@github.com:nineinchnick/trino-faker.git
+git remote add origin git@github.com:WaseeA/trino-faker.git
 git push -u origin main
 ```
 
