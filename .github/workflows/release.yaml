@@ -26,14 +26,20 @@ jobs:
         run: |
           git config user.name "${{ github.event.head_commit.committer.name }}"
           git config user.email "${{ github.event.head_commit.committer.email }}"
+      
+      - name: Set Git remote to your repository
+        run: |
+          git remote set-url origin https://${{ secrets.GITHUB_TOKEN }}@github.com/WaseeA/trino-plugin-archetype.git
+          git remote -v  # Verifying the remote is updated
+      
       - name: Prepare release
-        run: mvn -B release:prepare -DgithubOwner=WaseeA -DgithubRepo=trino-plugin-archetype
+        run: mvn -B release:prepare
       - name: Save version number in env
         run: |
           echo "VERSION=$(grep 'project.rel.pl.net.was\\:trino-plugin-archetype-root=' release.properties | cut -d'=' -f2)" >> $GITHUB_ENV
 
       - name: Publish JAR
-        run: mvn -B release:perform -DgithubOwner=WaseeA -DgithubRepo=trino-plugin-archetype -Darguments="-Dgpg.skip -Dmaven.deploy.skip=true"
+        run: mvn -B release:perform -Darguments="-Dgpg.skip -Dmaven.deploy.skip=true"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
